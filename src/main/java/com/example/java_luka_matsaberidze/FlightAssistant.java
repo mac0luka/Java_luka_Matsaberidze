@@ -1,12 +1,9 @@
 package com.example.java_luka_matsaberidze;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,9 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.TilePane;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -29,7 +24,7 @@ import java.util.*;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
-public class HelloApplication extends Application {
+public class FlightAssistant extends Application {
    private Text headerText;
     private DatePicker datePicker ;
     private TextField sourceField ;
@@ -59,6 +54,11 @@ public class HelloApplication extends Application {
         stage.show();
     }
     public static void main(String[] args) {
+        launch();
+    }
+
+    public void Launch()
+    {
         launch();
     }
 
@@ -93,7 +93,8 @@ public class HelloApplication extends Application {
             public void handle(ActionEvent actionEvent) {
                 if(ValidateButtonPress())
                 {
-                    SendDataToDatabase();
+                    SendDataToDatabase(sourceField.getText(),destinationField.getText(),Double.parseDouble(priceField.getText()),Integer.parseInt(passengerCountField.getText()),
+                            datePicker.getValue());
                 }
                 else
                 {
@@ -124,7 +125,7 @@ public class HelloApplication extends Application {
             }
         });
     }
-    private void AddGridUiElements(GridPane gridPane) throws DateTimeParseException
+    private void AddGridUiElements(GridPane gridPane)
     {
          headerText = new Text("Flight Assistant");
         headerText.setStyle(".Bold" +
@@ -212,14 +213,8 @@ public class HelloApplication extends Application {
         }
         return true;
     }
-
-    private void SendDataToDatabase()
+    public void SendDataToDatabase(String source,String destination, double price, int passengersCount, LocalDate localDate)
     {
-        String source = sourceField.getText();
-        String destination = destinationField.getText();
-        double price = Double.parseDouble(priceField.getText());
-        int passengersCount = Integer.parseInt(passengerCountField.getText());
-        LocalDate localDate = datePicker.getValue();
         FlightData flightData = new FlightData(source,destination,passengersCount,localDate,price);
         JDBCUtils.InsertDataToDatabase(flightData);
 
@@ -249,7 +244,7 @@ public class HelloApplication extends Application {
         passengerCountField.clear();
     }
 
-    private void GetCities()
+    public void GetCities()
     {
         sourceCitiesMap.clear();
         List<String> sourceCitiesList = JDBCUtils.GetSourceCities();
@@ -268,11 +263,7 @@ public class HelloApplication extends Application {
 
     private void ShowPieChart()
     {
-        PieChart pieChart = new PieChart();
         Scene scene = new Scene(new Group());
-//        stage.setTitle("Imported Fruits");
-//        stage.setWidth(500);
-//        stage.setHeight(500);
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         for (Map.Entry<String,Integer> entry : sourceCitiesMap.entrySet())
         {
