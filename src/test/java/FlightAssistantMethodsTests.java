@@ -43,7 +43,7 @@ public class FlightAssistantMethodsTests {
     public void InsertData()
     {
         System.out.println("adding data");
-        FlightData testData = new FlightData("test1","zugdidi",455,LocalDate.now(),25.5 );
+        FlightData testData = new FlightData("test1","fonichala",452,LocalDate.now(),25.3 );
         Assertions.assertDoesNotThrow(()->
                 JDBCUtils.InsertDataToDatabase(testData));
         System.out.println("data inserted");

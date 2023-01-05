@@ -275,7 +275,7 @@ public class FlightAssistant extends Application {
 
         ((Group) scene.getRoot()).getChildren().add(chart);
         Stage addStage = new Stage();
-        addStage.setTitle("Add Customer to Queue");
+        addStage.setTitle("Flights");
         addStage.setScene(scene);
         addStage.show();
     }
